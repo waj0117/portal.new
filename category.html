@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smart City Portal</title><link rel="icon" href="assets/logo.svg">
+<link rel="stylesheet" href="css/style.css"></head>
+<body>
+<div id="page"></div>
+<div id="toast"></div>
+<script src="js/common.js"></script>
+<script>
+renderNav('category');
+const key = CATS[new URLSearchParams(location.search).get('c')] ? new URLSearchParams(location.search).get('c') : 'other';
+const c = CATS[key];
+document.title = c.short + ' · Smart City Portal';
+$('page').innerHTML = `
+<section class="chero" style="--c:${c.color}"><div class="in">
+  <span class="tile"><img src="assets/icons/${c.icon}.svg" alt=""></span>
+  <div><h1>${c.headline}</h1><p>${c.intro}</p>
+    <button class="btn lamp" onclick="startComplaint('${key}')">${key === 'other' ? 'Raise your complaint' : 'Report ' + c.short.toLowerCase()}</button></div>
+</div></section>
+<div class="wrap" style="--c:${c.color}">
+  <div class="two">
+    <div class="box"><h2>${key === 'other' ? 'You can raise' : 'What you can report'}</h2>
+      <ul>${c.covers.map(x => `<li>${x}</li>`).join('')}</ul></div>
+    <div class="box"><h2>What happens next</h2>
+      <div class="fact"><span>Handled by</span><b>${c.dept}</b></div>
+      <div class="fact"><span>Typical response time</span><b>${c.eta}</b></div>
+      <div class="fact"><span>Follow-up</span><b>Track every update with your complaint ID</b></div></div>
+  </div>
+  <h2 style="margin:36px 0 14px;font-size:1.2rem">Other things you can report</h2>
+  <div class="chips">${Object.entries(CATS).filter(([k]) => k !== key).map(([k, o]) => `
+    <a class="chip" style="--c:${o.color}" href="category.html?c=${k}"><img src="assets/icons/${o.icon}.svg" alt="">${o.short}</a>`).join('')}</div>
+</div>`;
+</script>
+</body></html>
